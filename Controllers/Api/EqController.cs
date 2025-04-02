@@ -5,13 +5,13 @@ using MongoDB.Driver;
 [Route("api/eq")]
 public class EqController : Controller {
     [HttpGet("listar-terreno")]
-    public IActionResult ListarTerrenos(){
+    public IActionResult ListarTerrenos(string tipo){
         //listar todos los terrenos
         MongoClient client = new MongoClient(CadenasConexion.MONGO_DB);
         var db = client.GetDatabase("Inmuebles");
         var collection = db.GetCollection<Inmueble>("RentasVentas");
 
-        var filtro = Builders<Inmueble>.Filter.Eq(x => x.Tipo,"Terreno");
+        var filtro = Builders<Inmueble>.Filter.Eq(x => x.Tipo,tipo);
         var lista = collection.Find(filtro).ToList();
         return Ok(lista);
     }

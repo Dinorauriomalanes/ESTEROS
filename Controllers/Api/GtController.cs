@@ -2,20 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 
 [ApiController]
-[Route("api/eq")]
+[Route("api/gt")]
 public class GtController : Controller{
     [HttpGet("listar-casa-construccion")]
-    public IActionResult ListarCasaConstruccion(){
+    public IActionResult ListarCasaConstruccion(int metrosConstruccion){
         //listar todos los terrenos
         MongoClient client = new MongoClient(CadenasConexion.MONGO_DB);
         var db = client.GetDatabase("Inmuebles");
         var collection = db.GetCollection<Inmueble>("RentasVentas");
 
         var filtro = Builders<Inmueble>.Filter.Eq(x => x.Tipo,"Casa");
-        var filtroCons = Builders<Inmueble>.Filter.Gt(x => x.MetrosConstruccion,100);
+        var filtroCons = Builders<Inmueble>.Filter.Gt(x => x.MetrosConstruccion,metrosConstruccion);
 
         var filtrocompuesto = Builders<Inmueble>.Filter.And(filtro, filtroCons);
-        var lista = collection.Find(filtro).ToList();
+        var lista = collection.Find(filtrocompuesto).ToList();
         return Ok(lista);
     }
 
